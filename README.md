@@ -1,26 +1,34 @@
 # Foreman::Upstart::Su
 
-TODO: Write a gem description
+Use su instead of setuid in upstart.
+
+This gem brings back the original foreman upstart template that was removed in [this commit](https://github.com/ddollar/foreman/commit/c039f379ff1b6eb87673aa73a3548ba20d1722e4). Older versions of upstart (< 1.4) do not support `setuid` which is used in the newer foreman upstart template.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'foreman-upstart-su'
+gem 'foreman-upstart-su', :github => "dwilkie/foreman-upstart-su", :require => false
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install foreman-upstart-su
-
 ## Usage
 
-TODO: Write usage instructions here
+It can be used together with [capistrano-foreman](https://github.com/hyperoslo/capistrano-foreman) like this:
+
+```ruby
+# deploy.rb
+set(
+  :foreman_options,
+  {
+    :template => "`RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec bundle show foreman-upstart-su`/data/export/upstartsu"
+  }
+)
+```
 
 ## Contributing
 
