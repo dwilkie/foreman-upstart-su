@@ -1,0 +1,9 @@
+start on starting <%= app %>-<%= name %>
+stop on stopping <%= app %>-<%= name %>
+respawn
+<% env_vars = ["export PORT=\"#{port}\";"] -%>
+<% engine.env.each do |name,value| -%>
+  <% env_vars << "export #{name.upcase}=\"#{value.gsub(/'/, "'\"'\"'")}\";" -%>
+<% end -%>
+
+exec su - <%= user %> -c 'cd <%= engine.root %>; <%= env_vars.join(" ") %> <%= process.command %> >> <%= log %>/<%=name%>-<%=num%>.log 2>&1'
